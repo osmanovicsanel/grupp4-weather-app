@@ -1,0 +1,92 @@
+:root {
+  /* Färger */
+  --color-select: #2b7eff;
+  --color-accent: #51a2ff;
+
+  --color-bg: radial-gradient(circle at top, #0f172a, #020617);
+  --color-border: #314158;
+  --color-border-hover: #6a80a1;
+  --color-widget-bg: radial-gradient(#1d293d, #0f172b);
+
+  --color-text: #e2e8f0;
+  --color-text-week: #cad5e2;
+  --color-text-muted: #90a1b9;
+  --color-text-inverse: #62748e;
+
+  /* Väderstatusfärger */
+  --color-success: #05df72;
+  --color-warning: #fbbf24;
+  --color-error: #ef4444;
+
+  /* Typografi */
+  --font-family: "Inter", system-ui, -apple-system, sans-serif;
+
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+
+  --font-size-3xl: 3rem; /* 48px */
+  --font-size-4xl: 3.75rem; /* 60px, denna används endast för temperaturen-titeln på mobilskärm */
+  --font-size-5xl: 4.5rem; /* 72px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --line-height-base: 1.5;
+  --line-height-heading: 1.2;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.875rem; /* 14px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.5rem; /* 24px */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+}
+
+/* Grundläggande styling för search-form */
+input,
+select {
+  width: 100%;
+  max-width: 80rem;
+  padding: var(--space-1) var(--space-3);
+  height: 3.5rem;
+
+  background: var(--color-widget-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  transition: border-color var(--transition-normal);
+  border-radius: var(--radius-md);
+}
+
+input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  border-width: 2px;
+}
