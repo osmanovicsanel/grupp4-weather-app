@@ -1,48 +1,318 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <title>Väderapp - Grupp 4</title>
-         <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div id="app">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Väderapp - Grupp 4</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <main class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <i class="fas fa-location-dot"></i>
+          <span>Göteborg</span>
         </div>
-        <script type="module" src="src/main.js"></script>
+        <div class="header-right">
+          <span class="date">Thursday, February 16, 2026</span>
+        </div>
+      </header>
 
-        <main id="app-container">
-            <section id="search-section">
-                <input type="text" id="city-input" placeholder="Sök stad...">
-                <button id="search-section">Sök</button>
-            </section>
+      <!-- Search bar -->
+      <section class="search-section">
+        <div class="search-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="search"
+            class="search-bar"
+            placeholder="Search for a city..."
+          />
+        </div>
+      </section>
 
-            <section id="current-weather">
-                <h1 id="city-name">Stad</h1>
-                <p id="weather-description">Väderförållande</p>
-                <div id="temp-display">
-                    <span id="temperature">--</span>°C
-                </div>
-                <img id="weather-icon" src="" alt="Väderikon">
-            </section>
+      <!-- Current weather and Air Quality cards -->
+      <div class="cards-top-row">
+        <!-- Current Weather Card -->
+        <div class="weather-card">
+          <h3 class="card-location">Göteborg</h3>
+          <div class="weather-main">
+            <i class="fas fa-cloud weather-icon"></i>
+            <div class="temp-section">
+              <span class="temperature">18°</span>
+              <span class="feels-like">Feels like 14°</span>
+            </div>
+          </div>
+          <div class="weather-description">
+            <p class="condition">Partly Cloudy</p>
+            <p class="condition-detail">
+              Expect partly cloudy skies with mild temperatures.
+            </p>
+          </div>
+        </div>
 
-            <section id="weather-details">
-                <div class="detail-card">
-                    <span>Luftfuktighet:</span>
-                    <span id="humidity">---</span>%
-                </div>
-                <div class="detail-card">
-                    <span>Vindstyrka:</span>
-                    <span id="wind-speed">---</span> m/s
-                </div>
-            </section>
+        <!-- Air Quality Card -->
+        <div class="air-quality-card">
+          <div class="air-quality-header">
+            <i class="fas fa-wind"></i>
+            <h3>Air Quality</h3>
+          </div>
+          <div class="air-quality-main">
+            <span class="aq-value">45</span>
+            <span class="aq-label">Good</span>
+          </div>
+          <div class="aq-metrics">
+            <div class="aq-metric">
+              <span class="aq-metric-label">PM2.5</span>
+              <span class="aq-metric-value">12</span>
+              <span class="aq-metric-unit">µg/m³</span>
+            </div>
+            <div class="aq-metric">
+              <span class="aq-metric-label">PM10</span>
+              <span class="aq-metric-value">18</span>
+              <span class="aq-metric-unit">µg/m³</span>
+            </div>
+            <div class="aq-metric">
+              <span class="aq-metric-label">O3</span>
+              <span class="aq-metric-value">55</span>
+              <span class="aq-metric-unit">ppb</span>
+            </div>
+            <div class="aq-metric">
+              <span class="aq-metric-label">NO2</span>
+              <span class="aq-metric-value">28</span>
+              <span class="aq-metric-unit">ppb</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <section id="forecast-container">
-                <h2>7-dygnsprognos</h2>
-                <div id="forecast-list">
-                </div>
-            </section>
-        </main>
+      <!-- Hourly Forecast -->
+      <section class="hourly-section">
+        <h2 class="section-title">Hourly Forecast</h2>
+        <div class="hourly-forecast">
+          <div class="hourly-item">
+            <span class="hour">07:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">18°</span>
+            <span class="precip">0-1%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">10:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">18°</span>
+            <span class="precip">0-1%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">14:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">20°</span>
+            <span class="precip">0-3%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">15:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">21°</span>
+            <span class="precip">0-3%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">16:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">20°</span>
+            <span class="precip">0-10%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">17:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">19°</span>
+            <span class="precip">0-22%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">18:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">17°</span>
+            <span class="precip">0-39%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">19:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">16°</span>
+            <span class="precip">0-49%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">20:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">15°</span>
+            <span class="precip">0-59%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">21:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">15°</span>
+            <span class="precip">0-65%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">22:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">14°</span>
+            <span class="precip">0-78%</span>
+          </div>
+          <div class="hourly-item">
+            <span class="hour">23:00</span>
+            <i class="fas fa-cloud"></i>
+            <span class="temp">12°</span>
+            <span class="precip">0-120%</span>
+          </div>
+        </div>
+      </section>
 
-    </body>
+      <!-- Weather Details Grid -->
+      <div class="weather-details-grid">
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-droplet"></i>
+            <span>Humidity</span>
+          </div>
+          <div class="card-value">65%</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-wind"></i>
+            <span>Wind Speed</span>
+          </div>
+          <div class="card-value">12 km/h</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-eye"></i>
+            <span>Visibility</span>
+          </div>
+          <div class="card-value">10 km</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-gauge"></i>
+            <span>Pressure</span>
+          </div>
+          <div class="card-value">1013 mb</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-sun"></i>
+            <span>UV Index</span>
+          </div>
+          <div class="card-value">6</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-cloud-rain"></i>
+            <span>Precipitation</span>
+          </div>
+          <div class="card-value">20%</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-sunrise"></i>
+            <span>Sunrise</span>
+          </div>
+          <div class="card-value">06:42</div>
+        </div>
+        <div class="detail-card">
+          <div class="card-label">
+            <i class="fas fa-sunset"></i>
+            <span>Sunset</span>
+          </div>
+          <div class="card-value">19:18</div>
+        </div>
+      </div>
+
+      <!-- 7-Day Forecast -->
+      <section class="forecast-section">
+        <h2 class="section-title">7-Day Forecast</h2>
+        <div class="forecast-list">
+          <div class="forecast-day">
+            <span class="day-name">Monday</span>
+            <span class="day-date">Feb 17</span>
+            <i class="fas fa-cloud"></i>
+            <div class="day-temps">
+              <span class="precip-percent">70%</span>
+              <span class="temp-max">18°</span>
+              <span class="temp-min">12°</span>
+            </div>
+          </div>
+          <div class="forecast-day">
+            <span class="day-name">Tuesday</span>
+            <span class="day-date">Feb 18</span>
+            <i class="fas fa-cloud"></i>
+            <div class="day-temps">
+              <span class="precip-percent">70%</span>
+              <span class="temp-max">18°</span>
+              <span class="temp-min">12°</span>
+            </div>
+          </div>
+          <div class="forecast-day">
+            <span class="day-name">Wednesday</span>
+            <span class="day-date">Feb 19</span>
+            <i class="fas fa-snowflake"></i>
+            <div class="day-temps">
+              <span class="precip-percent">10%</span>
+              <span class="temp-max">21°</span>
+              <span class="temp-min">10°</span>
+            </div>
+          </div>
+          <div class="forecast-day">
+            <span class="day-name">Thursday</span>
+            <span class="day-date">Feb 20</span>
+            <i class="fas fa-cloud"></i>
+            <div class="day-temps">
+              <span class="precip-percent">41%</span>
+              <span class="temp-max">12°</span>
+              <span class="temp-min">10°</span>
+            </div>
+          </div>
+          <div class="forecast-day">
+            <span class="day-name">Friday</span>
+            <span class="day-date">Feb 21</span>
+            <i class="fas fa-snowflake"></i>
+            <div class="day-temps">
+              <span class="precip-percent">8%</span>
+              <span class="temp-max">22°</span>
+              <span class="temp-min">10°</span>
+            </div>
+          </div>
+          <div class="forecast-day">
+            <span class="day-name">Saturday</span>
+            <span class="day-date">Feb 22</span>
+            <i class="fas fa-cloud"></i>
+            <div class="day-temps">
+              <span class="precip-percent">15%</span>
+              <span class="temp-max">20°</span>
+              <span class="temp-min">10°</span>
+            </div>
+          </div>
+          <div class="forecast-day">
+            <span class="day-name">Sunday</span>
+            <span class="day-date">Feb 23</span>
+            <i class="fas fa-snowflake"></i>
+            <div class="day-temps">
+              <span class="precip-percent">6%</span>
+              <span class="temp-max">23°</span>
+              <span class="temp-min">10°</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>Try searching: Stockholm, Tokyo, Göteborg, or Copenhagen</p>
+      </footer>
+    </main>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
 </html>
