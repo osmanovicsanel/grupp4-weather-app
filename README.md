@@ -89,19 +89,9 @@ Här fyller vi in information om hur projektet kan köras
 ### Branch-strategi
 ```
 main
-  └── develop
-        ├── feature/[funktionsnamn]- [ditt namn]
-        ├── docs/[dokumentation]- [ditt namn]
-        └── style/[design]- [ditt namn]
-```
-
-### Commit-konventioner
-```
-Add: Ny funktionalitet
-Fix: Buggfix
-Update: Uppdatering av befintlig kod
-Style: CSS och design
-Docs: Dokumentation
+├── [funktionsnamn]- [ditt namn]
+├── [dokumentation]- [ditt namn]
+└── [design]- [ditt namn]
 ```
 
 #### 1. Hämta senaste ändringar
@@ -112,7 +102,7 @@ git pull origin main
 
 #### 2. Skapa ny branch med ditt namn
 ```bash
-git checkout -b feature/din-funktion-[ditt namn]
+git checkout -b feature/-[ditt namn]
 ```
 
 #### 3. Jobba med din kod
@@ -139,11 +129,10 @@ Skriv i `#frågor-och-funderingar`:
 ```
 🔄 Pull Request klar för review!
 Branch: feature/din-funktion-[ditt namn]
-Beskrivning: [Kort beskrivning]
+[Kort beskrivning]
 ```
 
 #### 8. Code Review & Merge
-- (Sanel kollar med William angående upplägg för pull requests/merge)
 - Vänta på godkännande innan merge
 - När godkänd: Merge och delete branch
 
@@ -152,7 +141,6 @@ Beskrivning: [Kort beskrivning]
 git checkout main
 git pull origin main
 ```
-
 ---
 
 ## Licens
