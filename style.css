@@ -173,6 +173,7 @@ body {
   color: var(--color-text-muted);
   margin-bottom: var(--space-4);
   font-weight: var(--font-weight-normal);
+  text-transform: capitalize;
 }
 
 .weather-main {
