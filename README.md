@@ -34,7 +34,7 @@ Väderappen är en gruppuppgift där vi skapar en webbapplikation med modern des
 - HTML5
 - CSS3
 - JavaScript
-- Weatherapi
+- WeatherAPI
 
 ---
 
