@@ -9,3 +9,9 @@ export async function handleSearch() {
     console.log(data);
     document.querySelector(".card-location").textContent = city;
 }
+
+const now = new Date();
+const dateName = now.toLocaleDateString("en-US", {weekday: "long"});
+const date = now.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric"});
+
+document.querySelector(".date").textContent = `${dateName}, ${date}`;
