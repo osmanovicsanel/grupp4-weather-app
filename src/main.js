@@ -7,8 +7,8 @@ import {
   renderWeatherDetails,
 } from "./ui.js";
 import { handleSearch } from "./utils.js";
+import { showError, clearError } from "./ui.js";
 
-console.log("Systemet är redo och filerna är kopplade!");
 
 // Vilken default stad ska vi visa när sidan laddas?
 const DEFAULT_CITY = "Gothenburg";
@@ -20,7 +20,41 @@ document
     if (event.key === "Enter") {
       await handleSearch();
     }
-  });
+});
+
+const searchBtn = document.getElementById("search-btn");
+const cityInput = document.getElementById("city-input");
+
+/**
+ *  Lyssna på klick på förstoringsglaset
+ * @author Sanel
+*/
+document.getElementById("search-btn").addEventListener("click", async () => {
+    await handleSearch();
+});
+
+/**
+ *  Funktion för felhantering
+ * @author Sanel
+ * @returns {Promise<void>}
+ */
+ async function handleSearch() {
+    const city = cityInput.value.trim();
+    clearError();
+
+if (!city) {
+    showError("Please enter a city name.");
+    return;
+}
+
+try {
+
+    // TODO: HÄR SKA VI ANROPA API:ET OCH HÄMTA VÄDERDATA! Och även lägga till om API:et inte hittar staden. - Sanel
+
+} catch (error) {
+    showError("Could not fetch weather data. Please check the spelling.");
+}
+}
 
 /**
  * Hämtar väderdata för en stad och uppdaterar hela sidan
@@ -56,9 +90,9 @@ async function loadWeather(city) {
       },
     );
   } catch (error) {
-    console.error("Fel vid hämtning av väder:", error);
+    console.error("Error fetching weather data:", error);
     // Visa felmeddelande för användaren
-    alert("Kunde inte hämta väderdata. Försök igen senare.");
+    alert("Could not fetch weather data. Please try again later.");
   }
 }
 

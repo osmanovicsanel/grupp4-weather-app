@@ -564,6 +564,10 @@ select:focus {
   outline: none;
 }
 
+/* Sanel, detta är för att errorMessage ska fungera */
+.hidden {
+  display: none;
+}
 /* För väderikoner från API */
 .weather-icon {
   width: 4rem;
