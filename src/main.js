@@ -1,6 +1,6 @@
-console.log("Systemet är redo och filerna är kopplade!");
-// console.log behöver ligga efter import, kan jag flytta på den eller är det bättre om Sanel flyttar den?
+
 import { getWeatherForecast, getWeatherByCoords } from "./api.js";
+import { getWeatherForecast } from "./api.js";
 import {
   renderWeeklyForecast,
   renderCurrentWeather,
@@ -8,6 +8,8 @@ import {
   renderWeatherDetails,
 } from "./ui.js";
 import { handleSearch } from "./utils.js";
+
+console.log("Systemet är redo och filerna är kopplade!");
 
 // Vilken default stad ska vi visa när sidan laddas?
 const DEFAULT_CITY = "Gothenburg";
