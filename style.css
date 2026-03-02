@@ -21,16 +21,25 @@
   /* Typografi */
   --font-family: "Inter", system-ui, -apple-system, sans-serif;
 
-  --font-size-xs: 0.75rem; /* 12px */
-  --font-size-sm: 0.875rem; /* 14px */
-  --font-size-md: 1rem; /* 16px */
-  --font-size-lg: 1.125rem; /* 18px */
-  --font-size-xl: 1.25rem; /* 20px */
-  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-xs: 0.75rem;
+  /* 12px */
+  --font-size-sm: 0.875rem;
+  /* 14px */
+  --font-size-md: 1rem;
+  /* 16px */
+  --font-size-lg: 1.125rem;
+  /* 18px */
+  --font-size-xl: 1.25rem;
+  /* 20px */
+  --font-size-2xl: 1.5rem;
+  /* 24px */
 
-  --font-size-3xl: 3rem; /* 48px */
-  --font-size-4xl: 3.75rem; /* 60px, denna används endast för temperaturen-titeln på mobilskärm */
-  --font-size-5xl: 4.5rem; /* 72px */
+  --font-size-3xl: 3rem;
+  /* 48px */
+  --font-size-4xl: 3.75rem;
+  /* 60px, denna används endast för temperaturen-titeln på mobilskärm */
+  --font-size-5xl: 4.5rem;
+  /* 72px */
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -49,9 +58,12 @@
 
   /* Border radius */
   --radius-sm: 0.25rem;
-  --radius-md: 0.875rem; /* 14px */
-  --radius-lg: 1rem; /* 16px */
-  --radius-xl: 1.5rem; /* 24px */
+  --radius-md: 0.875rem;
+  /* 14px */
+  --radius-lg: 1rem;
+  /* 16px */
+  --radius-xl: 1.5rem;
+  /* 24px */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -158,11 +170,9 @@ body {
 
 /* Weather Card */
 .weather-card {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
+  background: linear-gradient(135deg,
+      rgba(29, 41, 61, 0.8),
+      rgba(15, 23, 43, 0.8));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
@@ -226,11 +236,9 @@ body {
 
 /* Air Quality Card */
 .air-quality-card {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
+  background: linear-gradient(135deg,
+      rgba(29, 41, 61, 0.8),
+      rgba(15, 23, 43, 0.8));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
@@ -328,11 +336,9 @@ body {
 }
 
 .hourly-forecast {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
+  background: linear-gradient(135deg,
+      rgba(29, 41, 61, 0.8),
+      rgba(15, 23, 43, 0.8));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
@@ -391,11 +397,9 @@ body {
 }
 
 .detail-card {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
+  background: linear-gradient(135deg,
+      rgba(29, 41, 61, 0.8),
+      rgba(15, 23, 43, 0.8));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
@@ -429,11 +433,9 @@ body {
 }
 
 .forecast-list {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
+  background: linear-gradient(135deg,
+      rgba(29, 41, 61, 0.8),
+      rgba(15, 23, 43, 0.8));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -562,4 +564,44 @@ input:focus,
 select:focus {
   border-color: var(--color-accent);
   outline: none;
+}
+
+/* Search Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: #1d293d;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  list-style: none;
+  z-index: 100;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.search-dropdown.hidden {
+  display: none;
+}
+
+.search-dropdown li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.search-dropdown li:hover {
+  background: rgba(81, 162, 255, 0.1);
+  color: var(--color-text);
+}
+
+.search-dropdown li i {
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
 }
