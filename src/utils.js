@@ -75,13 +75,6 @@ export async function handleSearch() {
   }
 }
 
-
-    // Hämtar väderdata och skriver ut stadens namn - Alvina
-    const data = await getWeatherForecast(city);
-    console.log(data);
-    document.querySelector(".card-location").textContent = city;
-
-
 /**
 * Visar det aktuella datumet i headern
 * @author Alvina

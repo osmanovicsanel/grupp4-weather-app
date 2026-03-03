@@ -40,29 +40,6 @@ document.getElementById("search-btn").addEventListener("click", async () => {
 });
 
 /**
- *  Funktion för felhantering
- * @author Sanel
- * @returns {Promise<void>}
- */
- async function handleSearch() {
-    const city = cityInput.value.trim();
-    clearError();
-
-if (!city) {
-    showError("Please enter a city name.");
-    return;
-}
-
-try {
-
-    // TODO: HÄR SKA VI ANROPA API:ET OCH HÄMTA VÄDERDATA! Och även lägga till om API:et inte hittar staden. - Sanel
-
-} catch (error) {
-    showError("Could not fetch weather data. Please check the spelling.");
-}
-}
-
-/**
  * Hämtar väderdata för en stad och uppdaterar hela sidan
  * @author Maryam & Ivana
  * @param {String} city - Stadens namn
