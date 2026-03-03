@@ -1,6 +1,5 @@
 
 import { getWeatherForecast, getWeatherByCoords } from "./api.js";
-import { getWeatherForecast } from "./api.js";
 import {
   renderWeeklyForecast,
   renderCurrentWeather,
@@ -8,7 +7,9 @@ import {
   renderWeatherDetails,
 } from "./ui.js";
 import { handleSearch } from "./utils.js";
+import { displayCurrentDate } from "./ui.js";
 import { showError, clearError } from "./ui.js";
+
 
 
 // Vilken default stad ska vi visa när sidan laddas?
@@ -23,6 +24,10 @@ document
     }
 });
 
+// Visar aktuellt datum i headern - Alvina
+displayCurrentDate();
+
+
 const searchBtn = document.getElementById("search-btn");
 const cityInput = document.getElementById("city-input");
 
@@ -33,29 +38,6 @@ const cityInput = document.getElementById("city-input");
 document.getElementById("search-btn").addEventListener("click", async () => {
     await handleSearch();
 });
-
-/**
- *  Funktion för felhantering
- * @author Sanel
- * @returns {Promise<void>}
- */
- async function handleSearch() {
-    const city = cityInput.value.trim();
-    clearError();
-
-if (!city) {
-    showError("Please enter a city name.");
-    return;
-}
-
-try {
-
-    // TODO: HÄR SKA VI ANROPA API:ET OCH HÄMTA VÄDERDATA! Och även lägga till om API:et inte hittar staden. - Sanel
-
-} catch (error) {
-    showError("Could not fetch weather data. Please check the spelling.");
-}
-}
 
 /**
  * Hämtar väderdata för en stad och uppdaterar hela sidan

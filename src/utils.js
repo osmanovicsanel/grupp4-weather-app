@@ -1,31 +1,4 @@
 import { getWeatherForecast } from "./api.js";
-import { renderWeeklyForecast } from "./ui.js";
-
-export async function handleSearch() {
-    const city = document.querySelector(".search-bar").value.trim();
-    if (!city) return;
-
-    try {
-        const data = await getWeatherForecast(city);
-
-        // Uppdatera stadens namn
-        document.querySelector(".card-location").textContent = data.location.name;
-        document.querySelector(".header-left span").textContent = data.location.name;
-
-        // Uppdatera temperaturen
-        const current = data.current;
-        document.querySelector(".temperature").textContent = Math.round(current.temp_c) + "°";
-        document.querySelector(".feels-like").textContent = `Feels like ${Math.round(current.feelslike_c)}°`;
-        document.querySelector(".condition").textContent = current.condition.text;
-
-        // Rendera 7-dagarsprognosen
-        renderWeeklyForecast(data.forecast.forecastday);
-
-    } catch (error) {
-        console.error("Fel vid sökning:", error);
-    }
-}
-
 import {
   renderCurrentWeather,
   renderAirQuality,
@@ -33,11 +6,17 @@ import {
   renderWeeklyForecast,
 } from "./ui.js";
 
+/**
+ * Söker efter väderdata baserat på sökta staden
+ * och uppdaterar UI med resultatet
+ * @author Alvina & Ivana
+ * @returns {promise<void>}
+ */
 export async function handleSearch() {
   const city = document.querySelector(".search-bar").value;
 
   if (!city.trim()) {
-    alert("Ange en stad att söka efter");
+    alert("Please enter a city name");
     return;
   }
 
@@ -46,7 +25,7 @@ export async function handleSearch() {
 
     // Fortsätt endast om vi har current och air_quality
     if (!weatherData.current) {
-      throw new Error("Ingen 'current' data i API-svaret");
+      throw new Error("No 'current' data in the API response");
     }
 
     const currentWeather = weatherData.current;
@@ -54,7 +33,7 @@ export async function handleSearch() {
     const forecastDays = weatherData.forecast?.forecastday;
 
     if (!forecastDays) {
-      throw new Error("Ingen prognosdata i API-svaret");
+      throw new Error("No forecast data in the API response");
     }
 
     const todayForecast = forecastDays[0];
