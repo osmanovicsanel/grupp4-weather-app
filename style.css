@@ -563,3 +563,49 @@ select:focus {
   border-color: var(--color-accent);
   outline: none;
 }
+
+/* Sanel, detta är för att errorMessage ska fungera */
+.hidden {
+  display: none;
+}
+/* För väderikoner från API */
+.weather-icon {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+}
+
+.weather-icon-small {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+/* Air Quality färger */
+.aq-label.aq-good {
+  color: #05df72;
+}
+
+.aq-label.aq-moderate {
+  color: #fbbf24;
+}
+
+.aq-label.aq-sensitive {
+  color: #f97316;
+}
+
+.aq-label.aq-unhealthy {
+  color: #ef4444;
+}
+
+.aq-label.aq-very-unhealthy {
+  color: #a855f7;
+}
+
+.aq-label.aq-hazardous {
+  color: #7f1d1d;
+}
+
+.air-quality-card.aq-moderate {
+  border-color: #fbbf24;
+}

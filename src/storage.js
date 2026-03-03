@@ -1,0 +1,37 @@
+/**
+ * Hämtar listan med favoritstäder från webbläsarens lokala lagring.
+ * @author Sanel
+ * @returns {Array} En array med namnen på favoritstäderna.
+ */
+export function getFavorites() {
+    const favorites = localStorage.getItem('weatherFavorites');
+    return favorites ? JSON.parse(favorites) : [];
+}
+
+/**
+ * Sparar en ny stad i favoritlistan i den lokala lagringen.
+ * @author Sanel
+ * @param {string} city - Namnet på staden som ska sparas.
+ * @return {void}
+ */
+export function saveFavorite(city) {
+    const favorites = getFavorites();
+    // Kontroll så det inte blir samma stad två gånger.
+    if (!favorites.includes(city)) {
+        favorites.push(city);
+            localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
+        }
+    }
+
+/**
+ * Tar bort stad från favoriter i lokala lagringen.
+ * @author Sanel
+ * @param {string} city - Namnet på staden som ska tas bort.
+ * @returns {void}
+ */
+export function removeFavorite(city) {
+    let favorites = getFavorites();
+    favorites = favorites.filter(fav => fav !== city);
+    localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
+}
+

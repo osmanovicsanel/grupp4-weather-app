@@ -27,8 +27,9 @@
       <!-- Search bar -->
       <section class="search-section">
         <div class="search-wrapper">
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <i id="search-btn" class="fa-solid fa-magnifying-glass" style="cursor: pointer;"></i>
           <input
+            id="city-input"
             type="search"
             class="search-bar"
             placeholder="Search for a city..."
@@ -36,13 +37,16 @@
         </div>
       </section>
 
+      <!--Felmeddelande "Staden hittades inte"-->
+      <p id="error-message" class="hidden" style="color: #ff4d4d; text-align: center; margin-top: 10px; font-weight: bold;"></p>
+
       <!-- Current weather and Air Quality cards -->
       <div class="cards-top-row">
         <!-- Current Weather Card -->
-        <div class="weather-card">
+        <div id="weather-card" class="weather-card">
           <h3 class="card-location">Göteborg</h3>
           <div class="weather-main">
-            <i class="fas fa-cloud weather-icon"></i>
+            <img src="" alt="Weather icon" class="weather-icon" />
             <div class="temp-section">
               <span class="temperature">18°</span>
               <span class="feels-like">Feels like 14°</span>
