@@ -1,4 +1,5 @@
 
+import { getWeatherForecast, getWeatherByCoords } from "./api.js";
 import { getWeatherForecast } from "./api.js";
 import {
   renderWeeklyForecast,
@@ -96,4 +97,43 @@ async function loadWeather(city) {
   }
 }
 
-loadWeather(DEFAULT_CITY);
+/**
+ * Hämtar användarens position och laddar vädret för den platsen
+ * @author Maryam
+ * @returns {void}
+ */
+function loadWeatherByLocation() {
+    // Kontrollerar först att webbläsaren stödjer geolocation
+    if (!navigator.geolocation) {
+        console.error("Browser does not support geolocation");
+        loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
+        return;
+    }
+
+    // Frågar användaren om tillstånd att använda platsen
+    navigator.geolocation.getCurrentPosition(
+        // Om användaren godkänner
+        async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const weatherData = await getWeatherByCoords(lat, lon);
+
+            const currentWeather = weatherData.current;
+            const location = weatherData.location;
+            const forecastDays = weatherData.forecast.forecastday;
+            const todayForecast = forecastDays[0];
+
+            renderCurrentWeather(currentWeather, location);
+            renderAirQuality(currentWeather.air_quality);
+            renderWeatherDetails(currentWeather, todayForecast);
+            renderWeeklyForecast(forecastDays);
+        },
+        // Om användaren nekar eller nåt går fel
+        (error) => {
+            console.error("Could not get location", error);
+            loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
+        }
+    );
+}
+
+loadWeatherByLocation();
