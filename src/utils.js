@@ -6,11 +6,17 @@ import {
   renderWeeklyForecast,
 } from "./ui.js";
 
+/**
+ * Söker efter väderdata baserat på sökta staden
+ * och uppdaterar UI med resultatet
+ * @author Alvina & Ivana
+ * @returns {promise<void>}
+ */
 export async function handleSearch() {
   const city = document.querySelector(".search-bar").value;
 
   if (!city.trim()) {
-    alert("Ange en stad att söka efter");
+    alert("Please enter a city name");
     return;
   }
 
@@ -19,7 +25,7 @@ export async function handleSearch() {
 
     // Fortsätt endast om vi har current och air_quality
     if (!weatherData.current) {
-      throw new Error("Ingen 'current' data i API-svaret");
+      throw new Error("No 'current' data in the API response");
     }
 
     const currentWeather = weatherData.current;
@@ -27,7 +33,7 @@ export async function handleSearch() {
     const forecastDays = weatherData.forecast?.forecastday;
 
     if (!forecastDays) {
-      throw new Error("Ingen prognosdata i API-svaret");
+      throw new Error("No forecast data in the API response");
     }
 
     const todayForecast = forecastDays[0];
@@ -73,18 +79,5 @@ export async function handleSearch() {
       `Kunde inte hitta väder för "${city}". Kontrollera stavningen och försök igen.`,
     );
   }
-}
-
-/**
-* Visar det aktuella datumet i headern
-* @author Alvina
-* @returns {void} - Retunerar inget värde, uppdaterar bara DOM:en
-*/
-export function displayCurrentDate() {
-    const now = new Date();
-    const dateName = now.toLocaleDateString("en-US", { weekday: "long" });
-    const date = now.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
-
-    document.querySelector(".date").textContent = `${dateName}, ${date}`;
 }
 
