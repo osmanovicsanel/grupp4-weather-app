@@ -41,6 +41,8 @@ export function clearError() {
 * @returns {void} - Returnerar inget värde, uppdaterar bara DOM:en
 */
 export function renderWeeklyForecast(forecastDays) {
+    console.log(forecastDays.length); // debugging - visar bara 3 dagar
+    console.log(forecastDays); // debugging
   // Hitta elementet i HTML där datan ska läggas in
   const forecastList = document.querySelector(".forecast-list");
 
@@ -72,10 +74,10 @@ export function renderWeeklyForecast(forecastDays) {
             <span class="day-date">${dateStr}</span>
             <img src="${iconUrl}" alt="${conditionText}" class="weather-icon-small" />
             <div class="day-temps">
-              <span class="precip-mm">${precipitation} mm</span>
               <span class="temp-max">${maxTemp}°</span>
               <span class="temp-min">${minTemp}°</span>
             </div>
+            <span class="precip-mm">${precipitation} mm</span>
         `;
 
     // Lägger till dagelementet i listan

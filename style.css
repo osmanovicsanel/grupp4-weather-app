@@ -166,6 +166,7 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
+  overflow: hidden;
 }
 
 .card-location {
@@ -208,8 +209,11 @@ body {
 }
 
 .weather-description {
-  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+  justify-content: space-between;
+  align-items: center;
 }
 
 .condition {
@@ -317,7 +321,7 @@ body {
 
 /* Hourly Forecast */
 .hourly-section {
-  margin-bottom: var(--space-6);
+  margin-top: var(--space-4);
 }
 
 .section-title {
@@ -327,20 +331,19 @@ body {
   margin-bottom: var(--space-4);
 }
 
-.hourly-forecast {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
+.hourly-forecast { 
   display: flex;
   gap: var(--space-3);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
+  
+  /* Döljer scrollbar i chrome/safari - men den fungerar ändå */
+  -webkit-overflow-scrolling: touch;
+}
+
+.hourly-forecast::-webkit-scrollbar {
+  display: none;
 }
 
 .hourly-item {
@@ -350,11 +353,10 @@ body {
   gap: var(--space-2);
   min-width: 70px;
   padding: var(--space-3);
-  background: rgba(20, 30, 48, 0.6);
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
 }
 
+/* lägg till en border på hover likt 7-day forecast !! */
 .hourly-item:hover {
   background: rgba(20, 30, 48, 0.8);
   border-color: var(--color-border-hover);
@@ -429,39 +431,40 @@ body {
 }
 
 .forecast-list {
-  background: linear-gradient(
-    135deg,
-    rgba(29, 41, 61, 0.8),
-    rgba(15, 23, 43, 0.8)
-  );
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .forecast-day {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--color-border);
-  gap: var(--space-4);
+  gap: var(--space-2);
+  width: 110px;
+  padding: var(--space-3);
+  background: rgba(20, 30, 48, 0.6);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
-.forecast-day:last-child {
-  border-bottom: none;
+.forecast-day:hover {
+  border-color: var(--color-border-hover);
+  transition: border-color var(--transition-normal);
 }
 
 .day-name {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
-  min-width: 80px;
+  text-align: center;
 }
 
 .day-date {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
-  min-width: 60px;
+  text-align: center;
 }
 
 .forecast-day i {
@@ -474,7 +477,6 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  margin-left: auto;
 }
 
 .precip-percent {
@@ -487,13 +489,11 @@ body {
   font-size: var(--font-size-md);
   color: var(--color-text);
   font-weight: var(--font-weight-medium);
-  min-width: 35px;
 }
 
 .temp-min {
   font-size: var(--font-size-md);
   color: var(--color-text-inverse);
-  min-width: 35px;
 }
 
 /* Footer */
@@ -576,8 +576,8 @@ select:focus {
 }
 
 .weather-icon-small {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
   object-fit: contain;
 }
 
