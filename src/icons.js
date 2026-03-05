@@ -1,3 +1,11 @@
+/**
+ * Retunerar rätt Font Awsome ikon baserat på vilket väder det är och vilken tid på dygnet det är
+ * @author Alvina
+ * @param {string} conditionText - väderdatabeskrivning från WeatherAPI
+ * @param {number} isDay - 1 för dag, 0 för natt
+ * @returns {string} - Font Awsome klassträng
+ */
+
 export function getWeatherIcon(conditionText, isDay) {
     const dayIcons = {
         "Sunny": "fa-solid fa-sun",
