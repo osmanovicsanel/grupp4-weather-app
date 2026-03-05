@@ -8,6 +8,7 @@ import {
 import { handleSearch } from "./utils.js";
 import { displayCurrentDate } from "./ui.js";
 import { showError, clearError } from "./ui.js";
+import { getFavorites, saveFavorite, removeFavorite } from "/src/storage.js";
 
 const DEFAULT_CITY = "Gothenburg";
 
@@ -59,6 +60,7 @@ async function loadWeather(city) {
     renderAirQuality(currentWeather.air_quality); // Ivana
     renderWeatherDetails(currentWeather, todayForecast); // Ivana
     renderWeeklyForecast(forecastDays); // Maryam
+    updateStarState(city); // Sanel
 
     // Uppdatera datum i headern
     const date = new Date(location.localtime);
@@ -131,3 +133,34 @@ loadWeatherByLocation();
 if (!geolocationStarted) {
     loadWeather(DEFAULT_CITY);
 }
+
+/**
+ * Ändrar stjärnans utseende beroende på om staden är en favorit.
+ * @author Sanel
+ */
+function updateStarState(city) {
+  const favStar = document.getElementById('fav-star');
+  if (!favStar) return;
+
+  const favorites = getFavorites();
+  if (favorites.includes(city)) {
+    favStar.classList.replace('fa-regular', 'fa-solid');
+  } else {
+    favStar.classList.replace('fa-solid', 'fa-regular');
+  }
+}
+
+/** Klick, sparar/tarbort favoriter
+ * @author Sanel
+ */
+document.getElementById('fav-star')?.addEventListener('click', () => {
+  const city = document.getElementById('city-name').textContent;
+  const favorites = getFavorites();
+
+  if (favorites.includes(city)) {
+    removeFavorite(city);
+  } else {
+    saveFavorite(city);
+  }
+  updateStarState(city);
+});

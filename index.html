@@ -44,7 +44,10 @@
       <div class="cards-top-row">
         <!-- Current Weather Card -->
         <div id="weather-card" class="weather-card">
-          <h3 class="card-location">Göteborg</h3>
+          <div class="location-header">
+            <h3 class="card-location" id="city-name">Göteborg</h3>
+            <i id="fav-star" class="fa-regular fa-star"></i>
+          </div>
           <div class="weather-main">
             <i class="fa-solid fa-sun weather-icon"></i>
             <div class="temp-section">
@@ -246,6 +249,6 @@
       </footer>
     </main>
 
-    <script type="module" src="src/main.js"></script>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>
