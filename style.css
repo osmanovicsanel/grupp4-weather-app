@@ -609,3 +609,32 @@ select:focus {
 .air-quality-card.aq-moderate {
   border-color: #fbbf24;
 }
+
+/* Stadens namn och stjärna hamnar på samma rad. Sanel */
+.location-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Utseende för själva stjärnan. Sanel */
+#fav-star {
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: #cbd5e0;
+  transition: transform 0.2s ease, color 0.2s ease;
+  margin-left: auto;
+}
+
+#fav-star:hover {
+  transform: scale(1.2);
+  color: #f1c40f;
+}
+
+/* När staden är sparad. Sanel */
+#fav-star.fa-solid {
+  color: #f1c40f;
+}
+
