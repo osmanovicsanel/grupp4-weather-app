@@ -1,3 +1,4 @@
+import { getWeatherIcon } from "./icons.js"
 /**
  * Visar ett felmeddelande om staden inte hittas.
  * @author: Sanel
@@ -59,8 +60,8 @@ export function renderWeeklyForecast(forecastDays) {
     const maxTemp = Math.round(dayData.day.maxtemp_c);
     const minTemp = Math.round(dayData.day.mintemp_c);
     const precipitation = dayData.day.totalprecip_mm;
-    const iconUrl = "https:" + dayData.day.condition.icon;
     const conditionText = dayData.day.condition.text;
+    const iconClass = getWeatherIcon(conditionText, 1);
 
     // Skapar ett nytt HTML-element för den här dagen
     const dayElement = document.createElement("div");
@@ -70,7 +71,7 @@ export function renderWeeklyForecast(forecastDays) {
     dayElement.innerHTML = `
             <span class="day-name">${dayName}</span>
             <span class="day-date">${dateStr}</span>
-            <img src="${iconUrl}" alt="${conditionText}" class="weather-icon-small" />
+            <i class="${iconClass}"></i>
             <div class="day-temps">
               <span class="temp-max">${maxTemp}°</span>
               <span class="temp-min">${minTemp}°</span>
@@ -107,11 +108,17 @@ export function renderCurrentWeather(currentWeather, location) {
     );
   }
 
+  /*
   // Uppdatera ikonen--> bara sätt src-attributet
   const weatherIcon = document.querySelector(".weather-icon");
   weatherIcon.src = `https:${currentWeather.condition.icon}`;
-  weatherIcon.alt = currentWeather.condition.text;
-}
+  weatherIcon.alt = currentWeather.condition.text; */
+  const iconClass = getWeatherIcon(currentWeather.condition.text, currentWeather.is_day);
+  const weatherIcon = document.querySelector(".weather-icon");
+  weatherIcon.className = `weather-icon ${iconClass}`;
+  console.log(currentWeather.condition.text);
+  console.log(currentWeather.is_day);
+} 
 
 // Hjälpfunktion för att få beskrivningar på engelska
 function getConditionDescription(condition) {
