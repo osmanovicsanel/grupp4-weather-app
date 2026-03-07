@@ -4,6 +4,7 @@ import {
   renderAirQuality,
   renderWeatherDetails,
   renderWeeklyForecast,
+  renderHourlyForecast,
 } from "./ui.js";
 
 /**
@@ -37,9 +38,11 @@ export async function handleSearch() {
     }
 
     const todayForecast = forecastDays[0];
+    const hourlyData = todayForecast.hour; // Timdata för idag
 
     // Anropa alla render-funktioner men med skydd mot undefined
     renderCurrentWeather(currentWeather, location);
+    renderHourlyForecast(hourlyData); // <-- NY!
 
     // Kolla om air_quality finns innan vi anropar renderAirQuality
     if (currentWeather.air_quality) {
@@ -76,8 +79,7 @@ export async function handleSearch() {
   } catch (error) {
     console.error("Sökning misslyckades:", error);
     alert(
-      `Kunde inte hitta väder för "${city}". Kontrollera stavningen och försök igen.`,
+      `Could not find weather for "${city}". Please check the spelling and try again.`,
     );
   }
 }
-

@@ -1,4 +1,4 @@
-import { getWeatherIcon } from "./icons.js"
+import { getWeatherIcon } from "./icons.js";
 /**
  * Visar ett felmeddelande om staden inte hittas.
  * @author: Sanel
@@ -7,18 +7,17 @@ import { getWeatherIcon } from "./icons.js"
  */
 
 export function showError(message) {
-    const errorMessage = document.getElementById('error-message');
-    const cityInput = document.getElementById('city-input');
-    const weatherCard = document.getElementById('weather-card');  // För att rensa 
+  const errorMessage = document.getElementById("error-message");
+  const cityInput = document.getElementById("city-input");
+  const weatherCard = document.getElementById("weather-card"); // För att rensa
 
+  errorMessage.textContent = message;
+  errorMessage.classList.remove("hidden");
 
-    errorMessage.textContent = message;
-    errorMessage.classList.remove('hidden');
-
-    cityInput.value = '';
-    if (weatherCard) {
-        weatherCard.style.display = 'none'; // Dölj väderkortet om det finns
-    }
+  cityInput.value = "";
+  if (weatherCard) {
+    weatherCard.style.display = "none"; // Dölj väderkortet om det finns
+  }
 }
 
 /**
@@ -27,23 +26,23 @@ export function showError(message) {
  * @returns {void}
  */
 export function clearError() {
-    const errorMessage = document.getElementById('error-message');
-    const weatherCard = document.getElementById('weather-card');  // För att visa igen
+  const errorMessage = document.getElementById("error-message");
+  const weatherCard = document.getElementById("weather-card"); // För att visa igen
 
-    errorMessage.classList.add('hidden');
-    if (weatherCard) {
-        weatherCard.style.display = 'block'; // Visa väderkortet igen när vi söker igen.
-    }
+  errorMessage.classList.add("hidden");
+  if (weatherCard) {
+    weatherCard.style.display = "block"; // Visa väderkortet igen när vi söker igen.
+  }
 }
 /**
-* Renderar 7-dagarsprognosen i DOM:en
-* @author Maryam
-* @param {Array} forecastDays - En array med dagobjekt från WeatherAPI
-* @returns {void} - Returnerar inget värde, uppdaterar bara DOM:en
-*/
+ * Renderar 7-dagarsprognosen i DOM:en
+ * @author Maryam
+ * @param {Array} forecastDays - En array med dagobjekt från WeatherAPI
+ * @returns {void} - Returnerar inget värde, uppdaterar bara DOM:en
+ */
 export function renderWeeklyForecast(forecastDays) {
-    console.log(forecastDays.length); // debugging - visar bara 3 dagar
-    console.log(forecastDays); // debugging
+  console.log(forecastDays.length); // debugging - visar bara 3 dagar
+  console.log(forecastDays); // debugging
   // Hitta elementet i HTML där datan ska läggas in
   const forecastList = document.querySelector(".forecast-list");
 
@@ -115,12 +114,15 @@ export function renderCurrentWeather(currentWeather, location) {
   const weatherIcon = document.querySelector(".weather-icon");
   weatherIcon.src = `https:${currentWeather.condition.icon}`;
   weatherIcon.alt = currentWeather.condition.text; */
-  const iconClass = getWeatherIcon(currentWeather.condition.text, currentWeather.is_day);
+  const iconClass = getWeatherIcon(
+    currentWeather.condition.text,
+    currentWeather.is_day,
+  );
   const weatherIcon = document.querySelector(".weather-icon");
   weatherIcon.className = `weather-icon ${iconClass}`;
   console.log(currentWeather.condition.text);
   console.log(currentWeather.is_day);
-} 
+}
 
 // Hjälpfunktion för att få beskrivningar på engelska
 function getConditionDescription(condition) {
@@ -276,14 +278,105 @@ export function renderWeatherDetails(currentWeather, forecastDay) {
 // Ska någon felhantering läggas in här eller gör vi det i en helt separat fil?
 
 /**
-* Visar det aktuella datumet i headern
-* @author Alvina
-* @returns {void} - Retunerar inget värde, uppdaterar bara DOM:en
-*/
+ * Visar det aktuella datumet i headern
+ * @author Alvina
+ * @returns {void} - Retunerar inget värde, uppdaterar bara DOM:en
+ */
 export function displayCurrentDate() {
-    const now = new Date();
-    const dateName = now.toLocaleDateString("en-US", { weekday: "long" });
-    const date = now.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+  const now = new Date();
+  const dateName = now.toLocaleDateString("en-US", { weekday: "long" });
+  const date = now.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
-    document.querySelector(".date").textContent = `${dateName}, ${date}`;
+  document.querySelector(".date").textContent = `${dateName}, ${date}`;
+}
+
+/**
+ * Renderar timvis prognos
+ * @author Ivana
+ * @param {Array} hours - Array med timdata från API (forecastday[0].hour)
+ * @returns {void}
+ */
+export function renderHourlyForecast(hours) {
+  console.log("renderHourlyForecast anropad med", hours?.length, "timmar");
+
+  // Hitta rätt container (hourly-forecast)
+  const hourlyContainer = document.querySelector(".hourly-forecast");
+
+  if (!hourlyContainer) {
+    console.error("Hourly container not found");
+    return;
+  }
+
+  // Kontrollera att hours finns
+  if (!hours || !Array.isArray(hours) || hours.length === 0) {
+    console.warn("Ingen timdata tillgänglig");
+    hourlyContainer.innerHTML = "<p>No hourly data available</p>";
+    return;
+  }
+
+  // Töm befintlig data
+  hourlyContainer.innerHTML = "";
+
+  // Välj hur många timmar som ska visas (t.ex 12 eller 24)
+  const hoursToShow = 24;
+
+  // Loopar genom timmarna (börja från nuvarande timme)
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // Hitta index för närmaste kommande timme
+  let startIndex = hours.findIndex((hour) => {
+    const hourTime = new Date(hour.time).getHours();
+    return hourTime >= currentHour;
+  });
+
+  // Om ingen kommande timme hittas, börja från början
+  if (startIndex === -1) startIndex = 0;
+
+  // Visa 12 timmar framåt (eller färre om det inte finns 12)
+  const hoursToShow_arr = hours.slice(startIndex, startIndex + hoursToShow);
+
+  hoursToShow_arr.forEach((hour) => {
+    // Formatera tiden (API returnerar "2024-01-15 14:00")
+    const timeStr = hour.time.split(" ")[1]; // "14:00"
+    const hourFormatted = timeStr.substring(0, 5); // "14:00"
+
+    // Hämta temperatur och nederbörd
+    const temp = Math.round(hour.temp_c);
+    const precip = hour.chance_of_rain || 0;
+
+    // Välj ikon (Alvinas ikonfunktion kan användas här tror jag, eller så gör vi en enklare mapping)
+    let iconClass = "fa-solid fa-cloud"; // Default
+
+    // Försök hämta ikonklass om funktionen finns
+    if (typeof getWeatherIcon === "function") {
+      iconClass = getWeatherIcon(hour.condition.text, hour.is_day);
+    } else {
+      // Annars använd en enkel mapping
+      if (hour.condition.text.toLowerCase().includes("sun")) {
+        iconClass = "fa-solid fa-sun";
+      } else if (hour.condition.text.toLowerCase().includes("cloud")) {
+        iconClass = "fa-solid fa-cloud";
+      } else if (hour.condition.text.toLowerCase().includes("rain")) {
+        iconClass = "fa-solid fa-cloud-rain";
+      }
+    }
+
+    // Skapa hourly-item
+    const hourlyItem = document.createElement("div");
+    hourlyItem.classList.add("hourly-item");
+
+    hourlyItem.innerHTML = `
+      <span class="hour">${hourFormatted}</span>
+      <i class="${iconClass}"></i>
+      <span class="temp">${temp}°</span>
+      <span class="precip">${precip}%</span>
+    `;
+
+    hourlyContainer.appendChild(hourlyItem);
+  });
 }

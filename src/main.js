@@ -4,6 +4,7 @@ import {
   renderCurrentWeather,
   renderAirQuality,
   renderWeatherDetails,
+  renderHourlyForecast,
 } from "./ui.js";
 import { handleSearch } from "./utils.js";
 import { displayCurrentDate } from "./ui.js";
@@ -22,11 +23,10 @@ document
     if (event.key === "Enter") {
       await handleSearch();
     }
-});
+  });
 
 // Visar aktuellt datum i headern - Alvina
 displayCurrentDate();
-
 
 const searchBtn = document.getElementById("search-btn");
 const cityInput = document.getElementById("city-input");
@@ -34,9 +34,9 @@ const cityInput = document.getElementById("city-input");
 /**
  *  Lyssna på klick på förstoringsglaset
  * @author Sanel
-*/
+ */
 document.getElementById("search-btn").addEventListener("click", async () => {
-    await handleSearch();
+  await handleSearch();
 });
 
 /**
@@ -49,20 +49,21 @@ async function loadWeather(city) {
   try {
     const weatherData = await getWeatherForecast(city);
 
-    // Extrahera all data vi behöver
     const currentWeather = weatherData.current;
     const location = weatherData.location;
     const forecastDays = weatherData.forecast.forecastday;
     const todayForecast = forecastDays[0];
+    const hourlyData = todayForecast.hour; // Timdata för idag
 
     // Uppdatera alla delar av UI:t
-    renderCurrentWeather(currentWeather, location); // Ivana
-    renderAirQuality(currentWeather.air_quality); // Ivana
-    renderWeatherDetails(currentWeather, todayForecast); // Ivana
-    renderWeeklyForecast(forecastDays); // Maryam
-    updateStarState(city); // Sanel
+    renderCurrentWeather(currentWeather, location);
+    renderAirQuality(currentWeather.air_quality);
+    renderWeatherDetails(currentWeather, todayForecast);
+    renderWeeklyForecast(forecastDays);
+    renderHourlyForecast(hourlyData); // <-- NY!
+    updateStarState(city);
 
-    // Uppdatera datum i headern
+    // Uppdatera datum
     const date = new Date(location.localtime);
     document.querySelector(".date").textContent = date.toLocaleDateString(
       "en-US",
@@ -75,55 +76,53 @@ async function loadWeather(city) {
     );
   } catch (error) {
     console.error("Error fetching weather data:", error);
-    // Visa felmeddelande för användaren
     alert("Could not fetch weather data. Please try again later.");
   }
 }
-
 /**
  * Hämtar användarens position och laddar vädret för den platsen
  * @author Maryam
  * @returns {void}
  */
 function loadWeatherByLocation() {
-    // Kontrollerar först att webbläsaren stödjer geolocation
-    if (!navigator.geolocation) {
-        console.error("Browser does not support geolocation");
-        loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
-        return;
-    }
+  // Kontrollerar först att webbläsaren stödjer geolocation
+  if (!navigator.geolocation) {
+    console.error("Browser does not support geolocation");
+    loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
+    return;
+  }
 
-    geolocationStarted = true;
+  geolocationStarted = true;
 
-    // Frågar användaren om tillstånd att använda platsen
-    navigator.geolocation.getCurrentPosition(
-        // Om användaren godkänner
-        async (position) => {
-            try {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                const weatherData = await getWeatherByCoords(lat, lon);
+  // Frågar användaren om tillstånd att använda platsen
+  navigator.geolocation.getCurrentPosition(
+    // Om användaren godkänner
+    async (position) => {
+      try {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const weatherData = await getWeatherByCoords(lat, lon);
 
-                const currentWeather = weatherData.current;
-                const location = weatherData.location;
-                const forecastDays = weatherData.forecast.forecastday;
-                const todayForecast = forecastDays[0];
+        const currentWeather = weatherData.current;
+        const location = weatherData.location;
+        const forecastDays = weatherData.forecast.forecastday;
+        const todayForecast = forecastDays[0];
 
-                renderCurrentWeather(currentWeather, location);
-                renderAirQuality(currentWeather.air_quality);
-                renderWeatherDetails(currentWeather, todayForecast);
-                renderWeeklyForecast(forecastDays);
-            } catch (error) {
-                console.error("Could not get location", error);
-                loadWeather(DEFAULT_CITY); // Faller tillbaka på default om något går fel
-            }      
-        },
-        // Om användaren nekar eller något går fel med geolocation
-        (error) => {
-            console.error("Could not get location", error);
-            loadWeather(DEFAULT_CITY);
-        }
-    );
+        renderCurrentWeather(currentWeather, location);
+        renderAirQuality(currentWeather.air_quality);
+        renderWeatherDetails(currentWeather, todayForecast);
+        renderWeeklyForecast(forecastDays);
+      } catch (error) {
+        console.error("Could not get location", error);
+        loadWeather(DEFAULT_CITY); // Faller tillbaka på default om något går fel
+      }
+    },
+    // Om användaren nekar eller något går fel med geolocation
+    (error) => {
+      console.error("Could not get location", error);
+      loadWeather(DEFAULT_CITY);
+    },
+  );
 }
 
 // Skriver över med användarens plats när geolocation svarar
@@ -131,7 +130,7 @@ loadWeatherByLocation();
 
 // Kör bara default om geolocation inte startade
 if (!geolocationStarted) {
-    loadWeather(DEFAULT_CITY);
+  loadWeather(DEFAULT_CITY);
 }
 
 /**
@@ -139,22 +138,22 @@ if (!geolocationStarted) {
  * @author Sanel
  */
 function updateStarState(city) {
-  const favStar = document.getElementById('fav-star');
+  const favStar = document.getElementById("fav-star");
   if (!favStar) return;
 
   const favorites = getFavorites();
   if (favorites.includes(city)) {
-    favStar.classList.replace('fa-regular', 'fa-solid');
+    favStar.classList.replace("fa-regular", "fa-solid");
   } else {
-    favStar.classList.replace('fa-solid', 'fa-regular');
+    favStar.classList.replace("fa-solid", "fa-regular");
   }
 }
 
 /** Klick, sparar/tarbort favoriter
  * @author Sanel
  */
-document.getElementById('fav-star')?.addEventListener('click', () => {
-  const city = document.getElementById('city-name').textContent;
+document.getElementById("fav-star")?.addEventListener("click", () => {
+  const city = document.getElementById("city-name").textContent;
   const favorites = getFavorites();
 
   if (favorites.includes(city)) {
