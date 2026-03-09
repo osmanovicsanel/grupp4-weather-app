@@ -331,13 +331,13 @@ body {
   margin-bottom: var(--space-4);
 }
 
-.hourly-forecast { 
+.hourly-forecast {
   display: flex;
   gap: var(--space-3);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
-  
+
   /* Döljer scrollbar i chrome/safari - men den fungerar ändå */
   -webkit-overflow-scrolling: touch;
 }
@@ -626,7 +626,9 @@ select:focus {
   cursor: pointer;
   font-size: 1.6rem;
   color: #cbd5e0;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
   margin-left: auto;
 }
 
@@ -640,3 +642,71 @@ select:focus {
   color: #f1c40f;
 }
 
+/* Hourly Forecast - Horisontell scrolling */
+.hourly-forecast {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--space-2) 0 var(--space-4) 0; /* Lite padding för scrollbaren */
+  scroll-behavior: smooth;
+
+  /* Snyggare scrolling på Mac */
+  -webkit-overflow-scrolling: touch;
+
+  /* Dölj scrollbar i Chrome/Safari som standard, visas vid hover */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) var(--color-border);
+}
+
+/* Anpassad scrollbar för Chrome/Safari */
+.hourly-forecast::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hourly-forecast::-webkit-scrollbar-track {
+  background: var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.hourly-forecast::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.hourly-forecast::-webkit-scrollbar-thumb:hover {
+  background: var(--color-select);
+}
+
+/* Hourly items */
+.hourly-item {
+  flex: 0 0 auto; /* Förhindra att items krymper */
+  min-width: 70px;
+  padding: var(--space-3);
+  background: rgba(20, 30, 48, 0.6);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-normal);
+}
+
+.hourly-item:hover {
+  background: rgba(20, 30, 48, 0.8);
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px); /* Lyfter lite vid hover */
+}
+
+.hourly-forecast::after {
+  content: "";
+  flex: 0 0 var(--space-2);
+}
+
+/* Lägger till en gradient-mask för att indikera scrollbar, sidorna blir "suddiga". Vill vi behålla det? */
+.hourly-forecast {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
