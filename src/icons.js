@@ -8,6 +8,7 @@
 
 export function getWeatherIcon(conditionText, isDay) {
     const dayIcons = {
+        // Klart
         "Sunny": "fa-solid fa-sun",
         "Clear": "fa-solid fa_sun",
         "Partly cloudy": "fa-solid fa-cloud-sun",
@@ -17,6 +18,7 @@ export function getWeatherIcon(conditionText, isDay) {
     };
 
     const nightIcons = {
+        // Klart
         "Sunny": "fa-solid fa-moon",
         "Clear": "fa-solid fa-moon",
         "Partly cloudy": "fa-solid fa-cloud-moon",
@@ -68,8 +70,6 @@ export function getWeatherIcon(conditionText, isDay) {
         "Light snow showers": "fa-solid fa-snowflake",
         "Moderate or heavy snow showers": "fa-snowflake",
 
-
-
         //Molnigt
         "Cloudy": "fa-solid fa-cloud",
         "Overcast": "fa-solid fa-cloud",
@@ -86,6 +86,7 @@ export function getWeatherIcon(conditionText, isDay) {
     }
 
 
+    // Visar dag eller natt ikoner, annars visas en fallback-ikon
     if (isDay) {
         return dayIcons[conditionText] || sharedIcons[conditionText] || "fa-solid fa-cloud";
     } else {

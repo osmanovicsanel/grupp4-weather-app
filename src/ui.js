@@ -347,22 +347,8 @@ export function renderHourlyForecast(hours) {
     const temp = Math.round(hour.temp_c);
     const precip = hour.chance_of_rain || 0;
 
-    // Välj ikon (Alvinas ikonfunktion kan användas här tror jag, eller så gör vi en enklare mapping)
-    let iconClass = "fa-solid fa-cloud"; // Default
-
-    // Försök hämta ikonklass om funktionen finns
-    if (typeof getWeatherIcon === "function") {
-      iconClass = getWeatherIcon(hour.condition.text, hour.is_day);
-    } else {
-      // Annars använd en enkel mapping
-      if (hour.condition.text.toLowerCase().includes("sun")) {
-        iconClass = "fa-solid fa-sun";
-      } else if (hour.condition.text.toLowerCase().includes("cloud")) {
-        iconClass = "fa-solid fa-cloud";
-      } else if (hour.condition.text.toLowerCase().includes("rain")) {
-        iconClass = "fa-solid fa-cloud-rain";
-      }
-    }
+    // Hämtar ikoner
+    const iconClass = getWeatherIcon(hour.condition.text, hour.is_day);
 
     // Skapa hourly-item
     const hourlyItem = document.createElement("div");

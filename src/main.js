@@ -86,13 +86,28 @@ async function loadWeather(city) {
  * @author Maryam
  * @returns {void}
  */
-function loadWeatherByLocation() {
-  // Kontrollerar först att webbläsaren stödjer geolocation
-  if (!navigator.geolocation) {
-    console.error("Browser does not support geolocation");
-    loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
-    return;
-  }
+    async function loadWeatherByLocation() {
+        // Rensar hårdkodade värden medan plats och väderdata hämtas - Alvina
+    document.querySelector(".temperature").textContent = "-";
+    document.querySelector(".card-location").textContent = "Fetching location...";
+    document.querySelector(".header-left span").textContent = "Fetching location...";
+    document.querySelector(".feels-like").textContent = "-";
+    document.querySelector(".condition").textContent = "-";
+    document.querySelector(".condition-detail").textContent = "-";
+    document.querySelectorAll(".hour").forEach(el => el.textContent = "-");
+    document.querySelectorAll(".temp").forEach(el => el.textContent = "-");
+    document.querySelectorAll(".precip").forEach(el => el.textContent = "-");
+    document.querySelector(".aq-value").textContent = "-";
+    document.querySelector(".aq-label").textContent = "-";
+    document.querySelectorAll(".aq-metric-value").forEach(el => el.textContent = "-");
+    document.querySelectorAll(".card-value").forEach(el => el.textContent = "-");
+
+    // Kontrollerar först att webbläsaren stödjer geolocation
+    if (!navigator.geolocation) {
+        console.error("Browser does not support geolocation");
+        loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
+        return;
+    }
 
   geolocationStarted = true;
 
