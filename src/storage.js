@@ -1,28 +1,61 @@
-const STORAGE_KEY = "recentCities";
-const MAX_CITIES = 4;
-
 /**
- * Sparar en stad i sökhistoriken
- * @param {string} city - Stadens namn */
-export function saveCity(city) {
-    const cities = getRecentCities();
-
-    // Ta bort staden om den redan finns
-    const filtered = cities.filter(c => c.toLowerCase() !== city.toLowerCase());
-
-    // Lägg till staden först i listan
-    filtered.unshift(city);
-
-    // Behåll bara de 4 senaste
-    const trimmed = filtered.slice(0, MAX_CITIES);
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+ * Hämtar de 4 senaste sökta städerna.
+ * @returns {Array} En array med de senaste sökta städerna (max 4).
+ * @author Albrim
+ */
+export function getRecentSearches() {
+    const recent = localStorage.getItem('weatherRecentSearches');
+    return recent ? JSON.parse(recent) : [];
 }
 
 /**
- * Hämtar de senaste sökningarna
- * @returns {string[]} - Array med stadsnamn */
-export function getRecentCities() {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+ * Sparar en stad i senaste sökhistoriken (max 4 städer).
+ * @param {string} city - Namnet på staden som söktes.
+ * @returns {void}
+ * @author Albrim
+ */
+export function saveRecentSearch(city) {
+    let recent = getRecentSearches();
+    // Ta bort om staden redan finns (för att flytta den till toppen)
+    recent = recent.filter(c => c.toLowerCase() !== city.toLowerCase());
+    recent.unshift(city);
+    recent = recent.slice(0, 4); // Behåll max 4
+    localStorage.setItem('weatherRecentSearches', JSON.stringify(recent));
+}
+
+/**
+ * Hämtar listan med favoritstäder från webbläsarens lokala lagring.
+ * @author Sanel
+ * @returns {Array} En array med namnen på favoritstäderna.
+ */
+export function getFavorites() {
+    const favorites = localStorage.getItem('weatherFavorites');
+    return favorites ? JSON.parse(favorites) : [];
+}
+
+/**
+ * Sparar en ny stad i favoritlistan i den lokala lagringen.
+ * @author Sanel
+ * @param {string} city - Namnet på staden som ska sparas.
+ * @return {void}
+ */
+export function saveFavorite(city) {
+    const favorites = getFavorites();
+    // Kontroll så det inte blir samma stad två gånger.
+    if (!favorites.includes(city)) {
+        favorites.push(city);
+            localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
+        }
+    }
+
+/**
+ * Tar bort stad från favoriter i lokala lagringen.
+ * @author Sanel
+ * @param {string} city - Namnet på staden som ska tas bort.
+ * @returns {void}
+ */
+export function removeFavorite(city) {
+    let favorites = getFavorites();
+    favorites = favorites.filter(fav => fav !== city);
+    localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
 }

@@ -1,73 +1,102 @@
 import { getWeatherForecast } from "./api.js";
-import { renderWeeklyForecast } from "./ui.js";
-import { saveCity, getRecentCities } from "./storage.js";
+import {
+  renderCurrentWeather,
+  renderAirQuality,
+  renderWeatherDetails,
+  renderWeeklyForecast,
+  renderHourlyForecast,
+} from "./ui.js";
+import { saveRecentSearch } from "./storage.js";
 
-const searchBar = document.querySelector(".search-bar");
-const dropdown = document.querySelector(".search-dropdown");
-
-// Visa dropdown när användaren klickar på sökfältet
-searchBar.addEventListener("focus", () => {
-    showDropdown();
-});
-
-// Dölj dropdown när användaren klickar någon annanstans
-document.addEventListener("click", (e) => {
-    if (!e.target.closest(".search-wrapper")) {
-        dropdown.classList.add("hidden");
-    }
-});
-
-/*** Visar de 4 senaste sökningarna i dropdown */
-function showDropdown() {
-    const cities = getRecentCities();
-    dropdown.innerHTML = "";
-
-    if (cities.length === 0) {
-        dropdown.classList.add("hidden");
-        return;
-    }
-
-    cities.forEach(city => {
-        const li = document.createElement("li");
-        li.innerHTML = `${city}`;
-        li.addEventListener("click", () => {
-            searchBar.value = city;
-            dropdown.classList.add("hidden");
-            handleSearch();
-        });
-        dropdown.appendChild(li);
-    });
-
-    dropdown.classList.remove("hidden");
-}
-
+/**
+ * Söker efter väderdata baserat på sökta staden
+ * och uppdaterar UI med resultatet
+ * @author Alvina & Ivana
+ * @returns {promise<void>}
+ */
 export async function handleSearch() {
-    const city = searchBar.value.trim();
-    if (!city) return;
+  const city = document.querySelector(".search-bar").value;
 
-    try {
-        const data = await getWeatherForecast(city);
+  if (!city.trim()) {
+    alert("Please enter a city name");
+    return;
+  }
 
-        // Spara staden i historiken
-        saveCity(data.location.name);
+  try {
+    const weatherData = await getWeatherForecast(city);
 
-        // Uppdatera stadens namn
-        document.querySelector(".card-location").textContent = data.location.name;
-        document.querySelector(".header-left span").textContent = data.location.name;
+    // Spara i sökhistoriken - Albrim
+    saveRecentSearch(city);
 
-        // Uppdatera temperaturen
-        const current = data.current;
-        document.querySelector(".temperature").textContent = Math.round(current.temp_c) + "°";
-        document.querySelector(".feels-like").textContent = `Feels like ${Math.round(current.feelslike_c)}°`;
-        document.querySelector(".condition").textContent = current.condition.text;
-
-        // Rendera 7-dagarsprognosen
-        renderWeeklyForecast(data.forecast.forecastday);
-
-        // Stäng dropdown efter sökning
-        dropdown.classList.add("hidden");
-
-    } catch (error) {
-        console.error("Fel vid sökning:", error);
+    // Fortsätt endast om vi har current och air_quality - Albrim
+    if (!weatherData.current) {
+      throw new Error("No 'current' data in the API response");
     }
+
+    const currentWeather = weatherData.current;
+    const location = weatherData.location;
+    const forecastDays = weatherData.forecast?.forecastday;
+
+    if (!forecastDays) {
+      throw new Error("No forecast data in the API response");
+    }
+
+    const todayForecast = forecastDays[0];
+    const hourlyData = todayForecast.hour; // Timdata för idag
+
+    // Anropa alla render-funktioner men med skydd mot undefined
+    renderCurrentWeather(currentWeather, location);
+    // Uppdatera stjärnans state efter sökning - Albrim
+    const cityName = location.name;
+    const favStar = document.getElementById("fav-star");
+    if (favStar) {
+      const { getFavorites } = await import("./storage.js");
+      const favorites = getFavorites();
+      const isFavorite = favorites.some(fav => fav.toLowerCase() === cityName.toLowerCase());
+      if (isFavorite) {
+        favStar.classList.replace("fa-regular", "fa-solid");
+      } else {
+        favStar.classList.replace("fa-solid", "fa-regular");
+      }
+    }
+    renderHourlyForecast(hourlyData); // <-- NY!
+
+    // Kolla om air_quality finns innan vi anropar renderAirQuality
+    if (currentWeather.air_quality) {
+      renderAirQuality(currentWeather.air_quality);
+    } else {
+      console.warn(`Ingen air quality data för ${city}`);
+      // Visa "Ingen data" i Air Quality kortet
+      document.querySelector(".aq-value").textContent = "—";
+      document.querySelector(".aq-label").textContent = "Ingen data";
+
+      // Sätt tomma värden
+      const metrics = document.querySelectorAll(".aq-metric");
+      metrics.forEach((metric) => {
+        metric.querySelector(".aq-metric-value").textContent = "—";
+      });
+    }
+
+    renderWeatherDetails(currentWeather, todayForecast);
+    renderWeeklyForecast(forecastDays);
+
+    // Uppdatera datum
+    const date = new Date(location.localtime);
+    document.querySelector(".date").textContent = date.toLocaleDateString(
+      "en-US",
+      {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      },
+    );
+
+    document.querySelector(".search-bar").value = "";
+  } catch (error) {
+    console.error("Sökning misslyckades:", error);
+    alert(
+      `Could not find weather for "${city}". Please check the spelling and try again.`,
+    );
+  }
 }
