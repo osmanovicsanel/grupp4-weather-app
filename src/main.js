@@ -12,7 +12,6 @@ import {
 import { handleSearch } from "./utils.js";
 import { getFavorites, saveFavorite, removeFavorite } from "/src/storage.js";
 
-
 const DEFAULT_CITY = "Gothenburg";
 
 // Håller koll på om geolocation redan jobbar - Maryam
@@ -83,31 +82,36 @@ async function loadWeather(city) {
 }
 /**
  * Hämtar användarens position och laddar vädret för den platsen
- * @author Maryam
+ * @author Maryam & Ivana
  * @returns {void}
  */
-    async function loadWeatherByLocation() {
-        // Rensar hårdkodade värden medan plats och väderdata hämtas - Alvina
-    document.querySelector(".temperature").textContent = "-";
-    document.querySelector(".card-location").textContent = "Fetching location...";
-    document.querySelector(".header-left span").textContent = "Fetching location...";
-    document.querySelector(".feels-like").textContent = "-";
-    document.querySelector(".condition").textContent = "-";
-    document.querySelector(".condition-detail").textContent = "-";
-    document.querySelectorAll(".hour").forEach(el => el.textContent = "-");
-    document.querySelectorAll(".temp").forEach(el => el.textContent = "-");
-    document.querySelectorAll(".precip").forEach(el => el.textContent = "-");
-    document.querySelector(".aq-value").textContent = "-";
-    document.querySelector(".aq-label").textContent = "-";
-    document.querySelectorAll(".aq-metric-value").forEach(el => el.textContent = "-");
-    document.querySelectorAll(".card-value").forEach(el => el.textContent = "-");
+async function loadWeatherByLocation() {
+  // Rensar hårdkodade värden medan plats och väderdata hämtas - Alvina
+  document.querySelector(".temperature").textContent = "-";
+  document.querySelector(".card-location").textContent = "Fetching location...";
+  document.querySelector(".header-left span").textContent =
+    "Fetching location...";
+  document.querySelector(".feels-like").textContent = "-";
+  document.querySelector(".condition").textContent = "-";
+  document.querySelector(".condition-detail").textContent = "-";
+  document.querySelectorAll(".hour").forEach((el) => (el.textContent = "-"));
+  document.querySelectorAll(".temp").forEach((el) => (el.textContent = "-"));
+  document.querySelectorAll(".precip").forEach((el) => (el.textContent = "-"));
+  document.querySelector(".aq-value").textContent = "-";
+  document.querySelector(".aq-label").textContent = "-";
+  document
+    .querySelectorAll(".aq-metric-value")
+    .forEach((el) => (el.textContent = "-"));
+  document
+    .querySelectorAll(".card-value")
+    .forEach((el) => (el.textContent = "-"));
 
-    // Kontrollerar först att webbläsaren stödjer geolocation
-    if (!navigator.geolocation) {
-        console.error("Browser does not support geolocation");
-        loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
-        return;
-    }
+  // Kontrollerar först att webbläsaren stödjer geolocation
+  if (!navigator.geolocation) {
+    console.error("Browser does not support geolocation");
+    loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
+    return;
+  }
 
   geolocationStarted = true;
 
@@ -124,11 +128,13 @@ async function loadWeather(city) {
         const location = weatherData.location;
         const forecastDays = weatherData.forecast.forecastday;
         const todayForecast = forecastDays[0];
+        const hourlyData = todayForecast.hour; // Timdata för användarens plats
 
         renderCurrentWeather(currentWeather, location);
         renderAirQuality(currentWeather.air_quality);
         renderWeatherDetails(currentWeather, todayForecast);
         renderWeeklyForecast(forecastDays);
+        renderHourlyForecast(hourlyData); // <-- NY!
       } catch (error) {
         console.error("Could not get location", error);
         loadWeather(DEFAULT_CITY); // Faller tillbaka på default om något går fel
