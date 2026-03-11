@@ -1,6 +1,6 @@
 # Weather App
 
-En modern väderapplikation som hämtar och visar väderdata i realtid med fokus på ren design och användarvänlighet.
+Weather App är en webbapplikation byggd i JavaScript som hämtar och visar väderdata i realtid via WeatherAPI. Appen visar aktuellt väder baserat på din plats automatiskt via geolocation, och låter dig söka efter valfri stad i världen. Fokus ligger på användarvänlighet, ren kod och responsiv design för både desktop och mobil.
 
 ---
 
@@ -23,12 +23,6 @@ En modern väderapplikation som hämtar och visar väderdata i realtid med fokus
 
 ---
 
-## Om Projektet
-
-Väderappen är en gruppuppgift där vi skapar en webbapplikation med modern design som skiljer sig från traditionella vädertjänster. Fokus ligger på användarvänlighet, ren kod och responsiv design.
-
----
-
 ## Tekniker
 
 - HTML5
@@ -40,108 +34,48 @@ Väderappen är en gruppuppgift där vi skapar en webbapplikation med modern des
 
 ## Funktioner
 
-*Funktioner kommer att uppdateras under projektets gång.*
+### Aktuellt väder
+- Geolocation - Visar automatiskt vädret för din nuvarande plats (om du godkänner)
+- Sökfunktion med historik över de 4 senaste sökningarna
+- Favoritstäder - Spara städer med stjärnikonen, sparas lokalt i webbläsaren
+- Aktuell temperatur, känns-som-temperatur och väderbeskrivning
 
-### Grundfunktioner
-- Sök efter städer
-- Visa aktuellt väder
-- Responsiv design
+### Prognoser
+- Timvis prognos med temperatur och nederbörd
+- 7-dagars prognos med högsta/lägsta temperatur, nederbörd i mm och väderikon
 
-### Planerade funktioner
-- 7-dagars väderprognos
-- Favorit-städer
+### Väderdetaljer
+- Luftfuktighet, vindhastighet, sikt, lufttryck, UV-index, nederbörd, soluppgång och solnedgång
+
+### Luftkvalitet
+- Visar PM2.5, PM10, 03 och N02 med färgkodad kvalitetsindikator
 
 ---
 
-## Projektstruktur
+## Kända begränsningar
 
-```
-grupp4-weather-app/
-│
-├── index.html
-├── README.md
-├── .gitignore
-│
-├── css/
-│   └── style.css
-│
-├── src/
-│   ├── main.js
-│   ├── api.js
-│   ├── storage.js
-│   ├── ui.js
-│   └── utils.js
-│
-└── assets/
-    └── images/
-```
+- WeatherAPI stödjer inte alla städer med svenska tecken (å, ä, ö). Exempelvis kan städer som "Hässleholm" ge felmeddelandet "No matching location found" trots att de existerar. Detta upptäcktes sent i projektet och ett byte av API hade inneburit en alltför stor omstrukturering av koden.
 
 ---
 
 ## Installation
 
-Här fyller vi in information om hur projektet kan köras
-
----
-
-## Git Workflow
-
-### Arbetsflöde
-
-#### 1. Hämta senaste ändringar
+1. Klona repot:
 ```bash
-git checkout main
-git pull origin main
+git clone https://github.com/osmanovicsanel/grupp4-weather-app.git
 ```
 
-#### 2. Skapa ny branch
-```bash
-git checkout -b funktionsnamn
+2. Skapa en `config.js` fil i `src/`-mappen och lägg in följande kod med API-nyckel från WeatherAPI:
+```javascript
+export const CONFIG = {
+    API_KEY: "API_NYCKEL_HÄR"
+};
 ```
 
-**Exempel:**
-```bash
-git checkout -b 7-day-forecast
-git checkout -b search-functionality
-git checkout -b dark-mode
-```
+3. Öppna projektet i VS Code
 
-#### 3. Jobba med din kod
-Gör dina ändringar i VS Code
+4. Starta Live Server - högerklicka i index.html och välj "Open with Live Server"
 
-#### 4. Commit med ditt namn i slutet
-```bash
-git add .
-git commit -m "Beskrivning av ändring - Ditt Namn"
-```
-
-#### 5. Pusha till GitHub
-```bash
-git push origin funktionsnamn
-```
-
-#### 6. Skapa Pull Request
-- Gå till GitHub
-- Klicka på "Compare & pull request"
-- Fyll i beskrivning av vad du gjort
-
-#### 7. Be om Review i Discord
-Skriv i Discord:
-```
-🔄 Pull Request klar!
-Branch: funktionsnamn
-[Kort beskrivning av vad du gjort]
-```
-
-#### 8. Code Review & Merge
-- Vänta på godkännande från minst en gruppmedlem
-- När du fått review: Merge och delete branch på GitHub
-
-#### 9. Uppdatera lokal main
-```bash
-git checkout main
-git pull origin main
-```
 ---
 
 ## Licens
