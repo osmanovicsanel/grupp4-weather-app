@@ -22,7 +22,11 @@ document
   .querySelector(".search-bar")
   .addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
-      await handleSearch();
+      const city = event.target.value;
+      if (city) {
+        await loadWeather(city);
+        event.target.value = "";
+      }
     }
   });
 
@@ -37,7 +41,11 @@ const cityInput = document.getElementById("city-input");
  * @author Sanel
  */
 document.getElementById("search-btn").addEventListener("click", async () => {
-  await handleSearch();
+  const city = document.getElementById("city-input").value;
+  if (city) {
+    await loadWeather(city);
+    document.getElementById("city-input").value = "";
+  }
 });
 
 /**
@@ -52,6 +60,7 @@ async function loadWeather(city) {
 
     const currentWeather = weatherData.current;
     const location = weatherData.location;
+    currentActiveCity = location.name; // Sanel
     const forecastDays = weatherData.forecast.forecastday;
     const todayForecast = forecastDays[0];
     const hourlyData = todayForecast.hour; // Timdata för idag
@@ -62,7 +71,7 @@ async function loadWeather(city) {
     renderWeatherDetails(currentWeather, todayForecast);
     renderWeeklyForecast(forecastDays);
     renderHourlyForecast(hourlyData); // <-- NY!
-    updateStarState(city);
+    updateStarState(currentActiveCity); // Sanel
 
     // Uppdatera datum
     const date = new Date(location.localtime);
@@ -126,6 +135,8 @@ async function loadWeatherByLocation() {
 
         const currentWeather = weatherData.current;
         const location = weatherData.location;
+        currentActiveCity = location.name; // Sanel
+        updateStarState(currentActiveCity); // Sanel
         const forecastDays = weatherData.forecast.forecastday;
         const todayForecast = forecastDays[0];
         const hourlyData = todayForecast.hour; // Timdata för användarens plats
@@ -166,23 +177,29 @@ function updateStarState(city) {
 
   const favorites = getFavorites();
   if (favorites.includes(city)) {
-    favStar.classList.replace("fa-regular", "fa-solid");
+    favStar.className = "fa-solid fa-star";
   } else {
-    favStar.classList.replace("fa-solid", "fa-regular");
+    favStar.className = "fa-regular fa-star";
   }
 }
 
-/** Klick, sparar/tarbort favoriter
+/**
+ * Klick, sparar/tarbort favoriter
  * @author Sanel
  */
-document.getElementById("fav-star")?.addEventListener("click", () => {
-  const city = document.getElementById("city-name").textContent;
-  const favorites = getFavorites();
+document.addEventListener('click', (event) => {
+  if (event.target && event.target.id === 'fav-star') {
 
-  if (favorites.includes(city)) {
-    removeFavorite(city);
-  } else {
-    saveFavorite(city);
-  }
-  updateStarState(city);
-});
+    if (!currentActiveCity) return;
+    
+    const favorites = getFavorites();
+
+    if (favorites.includes(currentActiveCity)) {
+      removeFavorite(currentActiveCity);
+    } else {
+      saveFavorite(currentActiveCity);
+    }
+
+    updateStarState(currentActiveCity);
+    }
+  });
