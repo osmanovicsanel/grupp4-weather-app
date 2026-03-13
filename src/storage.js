@@ -1,7 +1,7 @@
 /**
  * Hämtar de 4 senaste sökta städerna.
- * @returns {Array} En array med de senaste sökta städerna (max 4).
  * @author Albrim
+ * @returns {Array}
  */
 export function getRecentSearches() {
     const recent = localStorage.getItem('weatherRecentSearches');
@@ -10,16 +10,15 @@ export function getRecentSearches() {
 
 /**
  * Sparar en stad i senaste sökhistoriken (max 4 städer).
- * @param {string} city - Namnet på staden som söktes.
- * @returns {void}
  * @author Albrim
+ * @param {string} city
+ * @returns {void}
  */
 export function saveRecentSearch(city) {
     let recent = getRecentSearches();
-    // Ta bort om staden redan finns (för att flytta den till toppen)
     recent = recent.filter(c => c.toLowerCase() !== city.toLowerCase());
     recent.unshift(city);
-    recent = recent.slice(0, 4); // Behåll max 4
+    recent = recent.slice(0, 4);
     localStorage.setItem('weatherRecentSearches', JSON.stringify(recent));
 }
 
@@ -44,9 +43,9 @@ export function saveFavorite(city) {
     // Kontroll så det inte blir samma stad två gånger.
     if (!favorites.includes(city)) {
         favorites.push(city);
-            localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
-        }
+        localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
     }
+}
 
 /**
  * Tar bort stad från favoriter i lokala lagringen.
@@ -59,3 +58,4 @@ export function removeFavorite(city) {
     favorites = favorites.filter(fav => fav !== city);
     localStorage.setItem('weatherFavorites', JSON.stringify(favorites));
 }
+

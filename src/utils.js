@@ -1,3 +1,4 @@
+import { saveRecentSearch, getFavorites } from "./storage.js"; // Albrim
 import { getWeatherForecast } from "./api.js";
 import {
   renderCurrentWeather,
@@ -6,7 +7,6 @@ import {
   renderWeeklyForecast,
   renderHourlyForecast,
 } from "./ui.js";
-import { saveRecentSearch } from "./storage.js";
 
 /**
  * Söker efter väderdata baserat på sökta staden
@@ -24,17 +24,24 @@ export async function handleSearch() {
 
   try {
     const weatherData = await getWeatherForecast(city);
+    saveRecentSearch(city); // Albrim
 
-    // Spara i sökhistoriken - Albrim
-    saveRecentSearch(city);
-
-    // Fortsätt endast om vi har current och air_quality - Albrim
+    // Fortsätt endast om vi har current och air_quality
     if (!weatherData.current) {
       throw new Error("No 'current' data in the API response");
     }
 
     const currentWeather = weatherData.current;
     const location = weatherData.location;
+
+    // Uppdatera stjärna - Albrim
+    const favStar = document.getElementById("fav-star");
+    if (favStar) {
+      const favorites = getFavorites();
+      const isFavorite = favorites.some(fav => fav.toLowerCase() === location.name.toLowerCase());
+      favStar.className = isFavorite ? "fa-solid fa-star" : "fa-regular fa-star";
+    }
+
     const forecastDays = weatherData.forecast?.forecastday;
 
     if (!forecastDays) {
@@ -46,19 +53,6 @@ export async function handleSearch() {
 
     // Anropa alla render-funktioner men med skydd mot undefined
     renderCurrentWeather(currentWeather, location);
-    // Uppdatera stjärnans state efter sökning - Albrim
-    const cityName = location.name;
-    const favStar = document.getElementById("fav-star");
-    if (favStar) {
-      const { getFavorites } = await import("./storage.js");
-      const favorites = getFavorites();
-      const isFavorite = favorites.some(fav => fav.toLowerCase() === cityName.toLowerCase());
-      if (isFavorite) {
-        favStar.classList.replace("fa-regular", "fa-solid");
-      } else {
-        favStar.classList.replace("fa-solid", "fa-regular");
-      }
-    }
     renderHourlyForecast(hourlyData); // <-- NY!
 
     // Kolla om air_quality finns innan vi anropar renderAirQuality

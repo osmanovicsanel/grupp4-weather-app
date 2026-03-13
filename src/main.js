@@ -10,34 +10,51 @@ import {
   renderHourlyForecast,
 } from "./ui.js";
 import { handleSearch } from "./utils.js";
-import { getFavorites, saveFavorite, removeFavorite, getRecentSearches } from "./storage.js";
+import { getFavorites, saveFavorite, removeFavorite, getRecentSearches, saveRecentSearch } from "./storage.js"; // Albrim lade till getRecentsearches
 
 const DEFAULT_CITY = "Gothenburg";
 
+// Håller koll på om geolocation redan jobbar - Maryam
 let geolocationStarted = false;
+
+let currentActiveCity = ""; // Sanel
 
 // Lyssna på Enter-knapptryck - Alvina
 document
   .querySelector(".search-bar")
   .addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
-      closeDropdown();
-      await handleSearch();
+      const city = event.target.value;
+      if (city) {
+        await loadWeather(city);
+        event.target.value = "";
+      }
     }
   });
 
 // Visar aktuellt datum i headern - Alvina
 displayCurrentDate();
 
-// Lyssna på klick på förstoringsglaset - Sanel
+const searchBtn = document.getElementById("search-btn");
+const cityInput = document.getElementById("city-input");
+
+/**
+ *  Lyssna på klick på förstoringsglaset
+ * @author Sanel
+ */
 document.getElementById("search-btn").addEventListener("click", async () => {
-  closeDropdown();
-  await handleSearch();
+  const city = document.getElementById("city-input").value;
+  if (city) {
+    await loadWeather(city);
+    document.getElementById("city-input").value = "";
+  }
 });
 
 /**
  * Hämtar väderdata för en stad och uppdaterar hela sidan
  * @author Maryam & Ivana
+ * @param {String} city - Stadens namn
+ * @returns {Promise<void>}
  */
 async function loadWeather(city) {
   try {
@@ -45,42 +62,74 @@ async function loadWeather(city) {
 
     const currentWeather = weatherData.current;
     const location = weatherData.location;
+    currentActiveCity = location.name; // Sanel
+    saveRecentSearch(location.name); // Albrim
     const forecastDays = weatherData.forecast.forecastday;
     const todayForecast = forecastDays[0];
-    const hourlyData = todayForecast.hour;
+    const hourlyData = todayForecast.hour; // Timdata för idag
 
+    // Uppdatera alla delar av UI:t
     renderCurrentWeather(currentWeather, location);
     renderAirQuality(currentWeather.air_quality);
     renderWeatherDetails(currentWeather, todayForecast);
     renderWeeklyForecast(forecastDays);
-    renderHourlyForecast(hourlyData);
-    updateStarState(city);
+    renderHourlyForecast(hourlyData); // <-- NY!
+    updateStarState(currentActiveCity); // Sanel
 
+    // Uppdatera datum
     const date = new Date(location.localtime);
     document.querySelector(".date").textContent = date.toLocaleDateString(
       "en-US",
-      { weekday: "long", year: "numeric", month: "long", day: "numeric" }
+      {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      },
     );
   } catch (error) {
     console.error("Error fetching weather data:", error);
     alert("Could not fetch weather data. Please try again later.");
   }
 }
-
 /**
  * Hämtar användarens position och laddar vädret för den platsen
- * @author Maryam
+ * @author Maryam & Ivana
+ * @returns {void}
  */
-function loadWeatherByLocation() {
+async function loadWeatherByLocation() {
+  // Rensar hårdkodade värden medan plats och väderdata hämtas - Alvina
+  document.querySelector(".temperature").textContent = "-";
+  document.querySelector(".card-location").textContent = "Fetching location...";
+  document.querySelector(".header-left span").textContent =
+    "Fetching location...";
+  document.querySelector(".feels-like").textContent = "-";
+  document.querySelector(".condition").textContent = "-";
+  document.querySelector(".condition-detail").textContent = "-";
+  document.querySelectorAll(".hour").forEach((el) => (el.textContent = "-"));
+  document.querySelectorAll(".temp").forEach((el) => (el.textContent = "-"));
+  document.querySelectorAll(".precip").forEach((el) => (el.textContent = "-"));
+  document.querySelector(".aq-value").textContent = "-";
+  document.querySelector(".aq-label").textContent = "-";
+  document
+    .querySelectorAll(".aq-metric-value")
+    .forEach((el) => (el.textContent = "-"));
+  document
+    .querySelectorAll(".card-value")
+    .forEach((el) => (el.textContent = "-"));
+
+  // Kontrollerar först att webbläsaren stödjer geolocation
   if (!navigator.geolocation) {
     console.error("Browser does not support geolocation");
-    loadWeather(DEFAULT_CITY);
+    loadWeather(DEFAULT_CITY); // Visar i så fall defaultstaden
     return;
   }
 
   geolocationStarted = true;
 
+  // Frågar användaren om tillstånd att använda platsen
   navigator.geolocation.getCurrentPosition(
+    // Om användaren godkänner
     async (position) => {
       try {
         const lat = position.coords.latitude;
@@ -89,27 +138,34 @@ function loadWeatherByLocation() {
 
         const currentWeather = weatherData.current;
         const location = weatherData.location;
+        currentActiveCity = location.name; // Sanel
+        updateStarState(currentActiveCity); // Sanel
         const forecastDays = weatherData.forecast.forecastday;
         const todayForecast = forecastDays[0];
+        const hourlyData = todayForecast.hour; // Timdata för användarens plats
 
         renderCurrentWeather(currentWeather, location);
         renderAirQuality(currentWeather.air_quality);
         renderWeatherDetails(currentWeather, todayForecast);
         renderWeeklyForecast(forecastDays);
+        renderHourlyForecast(hourlyData); // <-- NY!
       } catch (error) {
         console.error("Could not get location", error);
-        loadWeather(DEFAULT_CITY);
+        loadWeather(DEFAULT_CITY); // Faller tillbaka på default om något går fel
       }
     },
+    // Om användaren nekar eller något går fel med geolocation
     (error) => {
       console.error("Could not get location", error);
       loadWeather(DEFAULT_CITY);
-    }
+    },
   );
 }
 
+// Skriver över med användarens plats när geolocation svarar
 loadWeatherByLocation();
 
+// Kör bara default om geolocation inte startade
 if (!geolocationStarted) {
   loadWeather(DEFAULT_CITY);
 }
@@ -123,40 +179,36 @@ function updateStarState(city) {
   if (!favStar) return;
 
   const favorites = getFavorites();
-  const isFavorite = favorites.some(fav => fav.toLowerCase() === city.toLowerCase()); // Albrim
-  
-  if (isFavorite) {
-    favStar.classList.replace("fa-regular", "fa-solid");
+  if (favorites.includes(city)) {
+    favStar.className = "fa-solid fa-star";
   } else {
-    favStar.classList.replace("fa-solid", "fa-regular");
+    favStar.className = "fa-regular fa-star";
   }
 }
 
 /**
- * Klick på stjärnan — sparar/tar bort favorit och uppdaterar dropdown
+ * Klick, sparar/tarbort favoriter
  * @author Sanel
  */
-document.getElementById("fav-star")?.addEventListener("click", () => {
-  const city = document.getElementById("city-name").textContent;
-  const favorites = getFavorites();
+document.addEventListener('click', (event) => {
+  if (event.target && event.target.id === 'fav-star') {
+    if (!currentActiveCity) return;
+    
+    const favorites = getFavorites();
 
-  if (favorites.includes(city)) {
-    removeFavorite(city);
-  } else {
-    saveFavorite(city);
+    if (favorites.includes(currentActiveCity)) {
+      removeFavorite(currentActiveCity);
+    } else {
+      saveFavorite(currentActiveCity);
+    }
+
+    updateStarState(currentActiveCity);
+    renderSearchDropdown(); // Albrim — uppdatera dropdown
   }
-
-  updateStarState(city);
-  // Uppdatera dropdown om den råkar vara öppen
-  renderSearchDropdown();
 });
 
-// ── Dropdown-logik ──────────────────────────────────────────────
+// ── Dropdown-logik - Albrim 
 
-/**
- * Renderar dropdown med senaste sökningar och favoriter
- * @author Albrim
- */
 function renderSearchDropdown() {
   const recent = getRecentSearches();
   const favorites = getFavorites();
@@ -167,13 +219,12 @@ function renderSearchDropdown() {
   const favoritesSection = document.getElementById("favorites-section");
   const dropdown = document.getElementById("search-dropdown");
 
-  // Senaste sökningar
   recentList.innerHTML = "";
   if (recent.length > 0) {
     recentSection.style.display = "block";
     recent.forEach((city) => {
       const li = document.createElement("li");
-      li.innerHTML = `${city}`;;
+      li.textContent = city;
       li.addEventListener("click", () => {
         document.getElementById("city-input").value = city;
         closeDropdown();
@@ -185,13 +236,12 @@ function renderSearchDropdown() {
     recentSection.style.display = "none";
   }
 
-  // Favoriter - Albrim
   favoritesList.innerHTML = "";
   if (favorites.length > 0) {
     favoritesSection.style.display = "block";
     favorites.forEach((city) => {
       const li = document.createElement("li");
-      li.innerHTML = `${city}`;;
+      li.textContent = city;
       li.addEventListener("click", () => {
         document.getElementById("city-input").value = city;
         closeDropdown();
@@ -203,7 +253,6 @@ function renderSearchDropdown() {
     favoritesSection.style.display = "none";
   }
 
-  // Visa bara om det finns något
   if (recent.length > 0 || favorites.length > 0) {
     dropdown.classList.remove("hidden");
   } else {
@@ -215,12 +264,10 @@ function closeDropdown() {
   document.getElementById("search-dropdown").classList.add("hidden");
 }
 
-// Öppna dropdown vid fokus på sökfältet
 document.getElementById("city-input").addEventListener("focus", () => {
   renderSearchDropdown();
 });
 
-// Stäng dropdown vid klick utanför
 document.addEventListener("click", (e) => {
   const wrapper = document.querySelector(".search-wrapper");
   if (!wrapper.contains(e.target)) {
