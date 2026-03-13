@@ -293,7 +293,7 @@ export function displayCurrentDate() {
 }
 
 /**
- * Renderar timvis prognos
+ * Renderar timvis prognos - visar ALLA 24 timmar för den sökta staden
  * @author Ivana
  * @param {Array} hours - Array med timdata från API (forecastday[0].hour)
  * @returns {void}
@@ -319,26 +319,8 @@ export function renderHourlyForecast(hours) {
   // Töm befintlig data
   hourlyContainer.innerHTML = "";
 
-  // Välj hur många timmar som ska visas (t.ex 12 eller 24)
-  const hoursToShow = 24;
-
-  // Loopar genom timmarna (börja från nuvarande timme)
-  const now = new Date();
-  const currentHour = now.getHours();
-
-  // Hitta index för närmaste kommande timme
-  let startIndex = hours.findIndex((hour) => {
-    const hourTime = new Date(hour.time).getHours();
-    return hourTime >= currentHour;
-  });
-
-  // Om ingen kommande timme hittas, börja från början
-  if (startIndex === -1) startIndex = 0;
-
-  // Visa 12 timmar framåt (eller färre om det inte finns 12)
-  const hoursToShow_arr = hours.slice(startIndex, startIndex + hoursToShow);
-
-  hoursToShow_arr.forEach((hour) => {
+  // Visa ALLA 24 timmar - ingen filtrering efter tid som vi hade innan!
+  hours.forEach((hour) => {
     // Formatera tiden (API returnerar "2024-01-15 14:00")
     const timeStr = hour.time.split(" ")[1]; // "14:00"
     const hourFormatted = timeStr.substring(0, 5); // "14:00"
@@ -347,7 +329,7 @@ export function renderHourlyForecast(hours) {
     const temp = Math.round(hour.temp_c);
     const precip = hour.chance_of_rain || 0;
 
-    // Hämtar ikoner
+    // Hämtar ikoner från icon-funktion
     const iconClass = getWeatherIcon(hour.condition.text, hour.is_day);
 
     // Skapa hourly-item
@@ -363,4 +345,6 @@ export function renderHourlyForecast(hours) {
 
     hourlyContainer.appendChild(hourlyItem);
   });
+
+  console.log(`${hours.length} timmar renderade för staden`);
 }

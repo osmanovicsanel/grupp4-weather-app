@@ -331,6 +331,7 @@ body {
   margin-bottom: var(--space-4);
 }
 
+/* Hourly Forecast */
 .hourly-forecast {
   display: flex;
   gap: var(--space-3);
@@ -338,11 +339,33 @@ body {
   overflow-y: hidden;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  mask-image: linear-gradient(to right, black 95%, transparent);
+  padding-bottom: var(--space-2);
+
+  /* Firefox scrollbar */
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-accent) var(--color-border);
+}
+
+/* Webkit scrollbar (Chrome/Safari/Edge) */
+.hourly-forecast::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  background-color: var(--color-border);
 }
 
 .hourly-forecast::-webkit-scrollbar {
-  display: none;
+  height: 10px;
+  background-color: var(--color-border);
+}
+
+.hourly-forecast::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background-color: var(--color-accent);
+}
+
+.hourly-forecast::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-select);
 }
 
 .hourly-item {
@@ -433,6 +456,35 @@ body {
   gap: var(--space-3);
   overflow-x: auto;
   overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--space-4);
+
+  /* Firefox scrollbar */
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-accent) var(--color-border);
+}
+
+/* Webkit scrollbar (Chrome/Safari/Edge) */
+.forecast-list::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  background-color: var(--color-border);
+}
+
+.forecast-list::-webkit-scrollbar {
+  height: 10px;
+  background-color: var(--color-border);
+}
+
+.forecast-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background-color: var(--color-accent);
+}
+
+.forecast-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-select);
 }
 
 .forecast-day {

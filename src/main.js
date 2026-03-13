@@ -65,14 +65,14 @@ async function loadWeather(city) {
     currentActiveCity = location.name; // Sanel
     const forecastDays = weatherData.forecast.forecastday;
     const todayForecast = forecastDays[0];
-    const hourlyData = todayForecast.hour; // Timdata för idag
+    const hourlyData = todayForecast.hour; // Vi visar alla 24 timmar för idag!
 
     // Uppdatera alla delar av UI:t
     renderCurrentWeather(currentWeather, location);
     renderAirQuality(currentWeather.air_quality);
     renderWeatherDetails(currentWeather, todayForecast);
     renderWeeklyForecast(forecastDays);
-    renderHourlyForecast(hourlyData); // <-- NY!
+    renderHourlyForecast(hourlyData); // <-- Anropar med 24 timmar för idag
     updateStarState(currentActiveCity); // Sanel
 
     // Uppdatera datum
@@ -189,11 +189,10 @@ function updateStarState(city) {
  * Klick, sparar/tarbort favoriter
  * @author Sanel
  */
-document.addEventListener('click', (event) => {
-  if (event.target && event.target.id === 'fav-star') {
-
+document.addEventListener("click", (event) => {
+  if (event.target && event.target.id === "fav-star") {
     if (!currentActiveCity) return;
-    
+
     const favorites = getFavorites();
 
     if (favorites.includes(currentActiveCity)) {
@@ -203,5 +202,5 @@ document.addEventListener('click', (event) => {
     }
 
     updateStarState(currentActiveCity);
-    }
-  });
+  }
+});
