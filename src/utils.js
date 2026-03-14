@@ -42,7 +42,7 @@ export async function handleSearch() {
 
     // Anropa alla render-funktioner men med skydd mot undefined
     renderCurrentWeather(currentWeather, location);
-    renderHourlyForecast(hourlyData); // <-- NY!
+    renderHourlyForecast(hourlyData); // <-- Anropar med alla 24 timmar för idag
 
     // Kolla om air_quality finns innan vi anropar renderAirQuality
     if (currentWeather.air_quality) {
