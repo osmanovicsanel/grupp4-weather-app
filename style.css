@@ -341,6 +341,10 @@ body {
   -webkit-overflow-scrolling: touch;
   padding-bottom: var(--space-2);
 
+  /* Gradient till höger --> samma som 7-day forecast */
+  mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+
   /* Firefox scrollbar */
   scrollbar-width: auto;
   scrollbar-color: var(--color-accent) var(--color-border);
